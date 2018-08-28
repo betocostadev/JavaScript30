@@ -58,7 +58,30 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  function playSound(e) {
+    // Getting the key to play the audio
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    // Getting the .key class to add the .playing animation
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if(!audio) return; // stop the function from running
+    audio.currentTime = 0; // rewind to the start
+    audio.play();
+    key.classList.add('playing');
+  }
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return; // Skip if it's not transform
+    this.classList.remove('playing');
+  }
 
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  window.addEventListener('keydown', playSound);
+  /* // My Way of removing the class. It works too.
+  // Remove the class on keyup.
+  window.addEventListener('keyup', function(e) {
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    key.classList.remove('playing');
+  }) */
 </script>
 
 
