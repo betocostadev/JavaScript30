@@ -6,52 +6,31 @@
 </head>
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
-<!-- <input type="button" value="increaseLineWidth" id="increaseLineWidth" onclick="increaseLineWD()">
-<input type="button" value="decreaseLineWidth" id="decreaseLineWidth" onclick="decreaseLineWD()"> -->
 
-<!-- <style>
-  canvas {
-    border: 2px solid black;
-    margin: 0 10%;
-  }
-</style> -->
-<style>
-  html, body {
-    margin:0;
-  }
-</style>
 <script>
   const canvas = document.querySelector('#draw');
   const ctx = canvas.getContext('2d');
-  /* Fun Part */
-    // const increase = document.getElementById('increaseLineWidth').value;
-    // const decrease = document.getElementById('decreaseLineWidth').value;
-    // function increaseLineWD() {
-    //   ctx.lineWidth += 10;
-    // }
-    // function decreaseLineWD() {
-    //   ctx.lineWidth -= 10;
-    // }
 
-
-  /* End of Fun Part */
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   // Pen (pencil) properties
   ctx.strokeStyle = '#bada55';
   ctx.lineJoin = 'round'; // Try turning off to see the difference
   ctx.lineCap = 'round'; // Try turning off to see the difference
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 20;
 
 
   let isDrawing = false; // To avoid drawing when you let go of the click
   let lastX = 0;
   let lastY = 0;
+  // Coloring:
+  let hue = 0;
 
   function draw(e) {
     if (!isDrawing) return; // Stop the FN from running when mouse is not down
-    // Begin the Drawing:
-    ctx.beginPath();
+    // Change the color before starting to draw:
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.beginPath(); // Begins the drawing
     // Start from
     ctx.moveTo(lastX, lastY);
     // Go to
@@ -64,19 +43,31 @@
     lastY = e.offsetY; */
     // ES6 Way to do the samething (Destructuring an array):
     [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    // Change the hue as we keep the button down, just to keep changing the color.
+    hue++;
+    if (hue >= 360) {
+      hue = 0;
+    }
   }
 
   // Avoid the canvas to draw from where you stopped.
-  // It needs to update the new position and don't start the drawing from the previous location.
+  // It needs to update the new position and don't start the drawing from the previous position.
   canvas.addEventListener('mousedown', (e) => {
     isDrawing = true;
-    [lastX, lastY] = [e.offsetX, e.offsetY];
+    [lastX, lastY] = [e.offsetX, e.offsetY]; // That's what prevent's from wrong start
   });
 
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseup', () => isDrawing = false);
   canvas.addEventListener('mouseout', () => isDrawing = false);
 </script>
+
+<style>
+  html, body {
+    margin:0;
+  }
+</style>
 
 </body>
 </html>
