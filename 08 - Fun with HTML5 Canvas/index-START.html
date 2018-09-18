@@ -18,6 +18,8 @@
   ctx.lineJoin = 'round'; // Try turning off to see the difference
   ctx.lineCap = 'round'; // Try turning off to see the difference
   ctx.lineWidth = 20;
+  // Blend modes:
+  // ctx.globalCompositeOperation = 'multiply';
 
 
   let isDrawing = false; // To avoid drawing when you let go of the click
@@ -25,6 +27,8 @@
   let lastY = 0;
   // Coloring:
   let hue = 0;
+  // Change the line width when drawing
+  let direction = true;
 
   function draw(e) {
     if (!isDrawing) return; // Stop the FN from running when mouse is not down
@@ -48,6 +52,16 @@
     hue++;
     if (hue >= 360) {
       hue = 0;
+    }
+
+    // Change the line width - 1 to 100 increment, when reaches 100, decrement to 1.
+    if (ctx.lineWidth >= 150 || ctx.lineWidth <= 1) {
+      direction = !direction;
+    }
+    if (direction) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
     }
   }
 
