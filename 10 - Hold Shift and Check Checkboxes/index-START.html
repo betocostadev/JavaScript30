@@ -82,7 +82,7 @@
     </div>
     <div class="item">
       <input type="checkbox">
-      <p>Try do it without any libraries</p>
+      <p>Try to do it without any libraries</p>
     </div>
     <div class="item">
       <input type="checkbox">
@@ -99,6 +99,30 @@
   </div>
 
 <script>
+  // Select all checkboxes - class inbox - input type checkbox
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+  let lastChecked;
+  // console.log(checkboxes);
+
+  function handleCheck(e) {
+    // Check if they had the 'shift' key down
+    // AND check that the user is checking it, not unchecking.
+    let inBetween = false; // A variable that will set to true items in between that we want
+    if (e.shiftKey && this.checked) {
+      // go ahead and do what we please
+      // loop over every single checkbox
+      checkboxes.forEach(checkbox => {
+        if (checkbox === this || checkbox === lastChecked) {
+          inBetween = !inBetween; // making an 'on/off' switch.
+        }
+        if (inBetween) {
+          checkbox.checked = true;
+        }
+      });
+    }
+    lastChecked = this;
+  }
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
 </script>
 </body>
 </html>
