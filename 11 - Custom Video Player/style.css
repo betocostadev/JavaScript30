@@ -154,3 +154,22 @@ input[type=range]::-moz-range-thumb {
   background: #ffc600;
   cursor: pointer;
 }
+
+
+.time {
+  color: rgb(253, 253, 253);
+  box-shadow: 1px 1px 1px 1px #7A419B;
+  flex: 0.5;
+  font-size: 1rem;
+  padding-left: 1rem;
+  /* position: absolute;
+  left: 0; */
+}
+
+.totalTime {
+  color: rgb(253, 253, 253);
+  box-shadow: 1px 1px 1px 1px #7A419B;
+  flex: 0.5;
+  font-size: 1rem;
+  padding-left: 1rem;
+}
