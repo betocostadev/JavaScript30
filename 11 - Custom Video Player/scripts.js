@@ -67,8 +67,12 @@ progress.addEventListener('mouseup', () => mousedown = false);
 function displayTime() {
     const time = document.getElementsByClassName('time')[0];
     const totalTime = document.getElementsByClassName('totalTime')[0];
-    time.innerText = parseFloat(video.currentTime);
-    totalTime.innerText = parseFloat(video.duration) * 0.0166667;
+    videoDuration = parseInt(video.duration);
+    minutes = Math.floor(videoDuration / 60);
+    seconds = videoDuration - minutes * 60;
+    currentVideoTime = parseInt(video.currentTime);
+    totalTime.innerHTML = (minutes + ':' + seconds);
+    time.innerHTML = (currentVideoTime);
     setTimeout(displayTime, 1000);
 }
 

@@ -158,18 +158,14 @@ input[type=range]::-moz-range-thumb {
 
 .time {
   color: rgb(253, 253, 253);
-  box-shadow: 1px 1px 1px 1px #7A419B;
-  flex: 0.5;
-  font-size: 1rem;
+  flex: 0.3;
+  font-size: 1.2rem;
   padding-left: 1rem;
-  /* position: absolute;
-  left: 0; */
 }
 
 .totalTime {
   color: rgb(253, 253, 253);
-  box-shadow: 1px 1px 1px 1px #7A419B;
-  flex: 0.5;
-  font-size: 1rem;
+  flex: 0.3;
+  font-size: 1.2rem;
   padding-left: 1rem;
 }
