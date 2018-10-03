@@ -7,6 +7,20 @@
 </head>
 <body>
 <script>
+  const pressed = [];
+  const secretCode = 'wesbos';
+  window.addEventListener('keyup', (e) => {
+    console.log(e.key);
+    pressed.push(e.key);
+    // Now let's get only what we want
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+    if (pressed.join('').includes(secretCode)) {
+      console.log('You did it!');
+      // Using the cornify to make something funny
+      cornify_add();
+    }
+    console.log(pressed);
+  })
 </script>
 </body>
 </html>
