@@ -13,8 +13,11 @@
     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
 
     // and we want to make a copy of it.
+    const team = players;
 
     // You might think we can just do something like this:
+    // team[3] = 'Lux';
+    console.log(players, team);
 
     // however what happens when we update that array?
 
@@ -25,12 +28,23 @@
     // Why? It's because that is an array reference, not an array copy. They both point to the same array!
 
     // So, how do we fix this? We take a copy instead!
-
+    const team2 = players.slice(); // If we pass nothing, slice will make a copy of the arr
+    team2[3] = 'Bobby';
+    console.log('The players array: ' + players);
+    console.log('The team2 array: ' + team2);
     // one way
 
     // or create a new array and concat the old one in
-
+    const team3 = [].concat(players);
+    console.log('The team3 array: ' + team3);
     // or use the new ES6 Spread
+    console.log('Using the ES6 spread: ');
+    const team4 = [...players];
+    team4[2] = 'Jamal';
+    console.log('The team4 copy of players but with a change: ' + team4);
+
+    const team5 = Array.from(players);
+    console.log('Team 5 using Array.from(players): ' + team5);
 
     // now when we update it, the original one isn't changed
 
@@ -43,12 +57,42 @@
     };
 
     // and think we make a copy:
-
+    const captain = person;
+    captain.number = 99;
+    console.log('We added a reference using captain.number = 99, so now: ');
+    console.log(captain);
     // how do we take a copy instead?
-
+    const captain2 = Object.assign({}, person, {number: 17});
+    console.log('Person: ');
+    console.log(person);
+    console.log('Captain2: ');
+    console.log(captain2);
     // We will hopefully soon see the object ...spread
-
+    const captain3 = {...person};
+    console.log(captain3);
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    const wes = {
+      name: 'Wes',
+      age: 33,
+      social: {
+        twitter: '@wesbos',
+        facebook: 'wesbos.developer'
+      }
+    };
+    console.log(wes);
+
+    const wes2 = Object.assign({}, wes);
+    wes2.name = 'Borland';
+    console.log('Wes and wes2 after:');
+    console.log(wes);
+    console.log(wes2);
+    // Until here is just a copy, but since it is shallow, it wil not change the 'sub-object', so
+    // the social part will not work...
+    wes2.social.twitter = '@radvitz';
+    console.log('Now that we have changed the social part of the copy, lets see both:');
+    console.log(wes);
+    console.log(wes2);
+    console.log('Changed all the instances of the objects twitter');
 
   </script>
 
