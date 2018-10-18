@@ -43,6 +43,8 @@
   </div>
 
   <script>
+    // Debounce function added to avoid performance problems.
+    // It will not run all time, it will wait some time before running.
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -56,7 +58,27 @@
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
       };
-    }
+    };
+
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide(ev) {
+      sliderImages.forEach(sliderImage => {
+        // half way through the image
+        const slideInAt = (window.scrollY + window.innerHeight) - (sliderImage.height / 2);
+        // the bottom of the image
+        const imageBottom = sliderImage.offsetTop + sliderImage.height;
+        const isHalfShown = slideInAt > sliderImage.offsetTop;
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        if (isHalfShown && isNotScrolledPast) {
+          sliderImage.classList.add('active');
+        } else {
+          sliderImage.classList.remove('active');
+        }
+      })
+    };
+
+    window.addEventListener('scroll', debounce(checkSlide));
 
   </script>
 
@@ -103,10 +125,10 @@
     }
 
     .align-left.slide-in {
-      transform:translateX(-30%) scale(0.95);
+      transform:translateX(-45%) scale(0.95);
     }
     .align-right.slide-in {
-      transform:translateX(30%) scale(0.95);
+      transform:translateX(45%) scale(0.95);
     }
 
     .slide-in.active {
