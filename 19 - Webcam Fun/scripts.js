@@ -29,7 +29,13 @@ function paintToCanvas() {
     // Get the image pixels to apply the filters:
     let pixels = ctx.getImageData(0, 0, width, height);
     // mess with the pixels with the function
-    pixels = redEffect(pixels);
+
+    // pixels = redEffect(pixels);
+
+    // pixels = rgbSplit(pixels);
+    // ctx.globalAlpha = 0.4;
+
+    pixels = greenScreen(pixels);
     // put them back
     ctx.putImageData(pixels, 0, 0)
   }, 16);
@@ -52,10 +58,44 @@ function takePhoto() {
 // Filter function - Red
 function redEffect(pixels) {
   // increment by 4 and not 1, since we have 4 values 'RGBA' for each pixel.
-  for(let i = 0; i < pixels.data.lenght; i += 4) {
+  for(let i = 0; i < pixels.data.length; i += 4) {
     pixels.data[i + 0] = pixels.data[i + 0] + 100; // red
     pixels.data[i + 1] = pixels.data[i + 1] - 55; // green
     pixels.data[i + 2] = pixels.data[i + 2] * 0.5; // blue
+  }
+  return pixels;
+}
+
+function rgbSplit(pixels) {
+  // increment by 4 and not 1, since we have 4 values 'RGBA' for each pixel.
+  for(let i = 0; i < pixels.data.length; i += 4) {
+    pixels.data[i - 200] = pixels.data[i + 0]; // red
+    pixels.data[i + 450] = pixels.data[i + 1]; // green
+    pixels.data[i - 450] = pixels.data[i + 2]; // blue
+  }
+  return pixels;
+}
+
+function greenScreen(pixels) {
+  const levels = {};
+  [...document.querySelectorAll('.rgb input')].forEach((input) => {
+    levels[input.name] = input.value;
+  });
+
+  for (i = 0; i < pixels.data.length; i+=4) {
+    red = pixels.data[i + 0];
+    green = pixels.data[i + 1];
+    blue = pixels.data[i + 2];
+    alpha = pixels.data[i + 3];
+
+    if (red >= levels.rmin
+        && green >= levels.gmin
+        && blue >= levels.bmin
+        && red <= levels.rmax
+        && green <= levels.gmax
+        && blue <= levels.bmax) {
+          pixels.data[i + 3] = 0;
+      }
   }
   return pixels;
 }
