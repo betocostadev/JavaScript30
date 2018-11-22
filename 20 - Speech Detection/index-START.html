@@ -12,6 +12,41 @@
 <script>
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;
+
+  let p = document.createElement('p');
+  const words = document.querySelector('.words');
+  words.appendChild(p);
+
+  recognition.addEventListener('result', e => {
+    // console.log(e.results);
+    // Convert the speechRec into an Array
+    const transcript = Array.from(e.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('')
+    // Get the transcript to a paragraph
+    p.textContent = transcript;
+    // It will overwrite the paragraph everytime, so we need to add a new paragraph.
+    if(e.results[0].isFinal) {
+      p = document.createElement('p');
+      words.appendChild(p);
+    }
+    // If we want to use a function based on the speechRecognition, like getting the weather,
+    // we could do it like below:
+    if(transcript.includes('grelos')) {
+      console.log('Voce disse, grelos, a palavra mágica!');
+    }
+
+    console.log(transcript);
+  });
+
+  // When the result above is finished, the recognition will stop, so we need to add a second
+  // event listener to keep the function working.
+  recognition.addEventListener('end', recognition.start);
+
+  recognition.start();
 
 </script>
 
