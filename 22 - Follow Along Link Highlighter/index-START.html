@@ -27,6 +27,36 @@
 
   <script>
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+    const triggers = document.querySelectorAll('a');
+    const highlight = document.createElement('span');
+    highlight.classList.add('highlight');
+    document.body.append(highlight);
+
+    // Listen to the user getting a link
+    function highlightLink() {
+      // Now we need to figure out the item dimensions and where it is on the page
+      // this below will apply to each of the links
+      const linkCoords = this.getBoundingClientRect();
+      // To avoid the style to be applyed in the wrong position, lets get coords that update
+      // if the user scrolls the page.
+      const coords = {
+        width: linkCoords.width,
+        height: linkCoords.height,
+        top: linkCoords.top + window.scrollY,
+        left: linkCoords.left + window.scrollX
+      };
+      // Then apply the style:
+      highlight.style.width = `${coords.width}px`;
+      highlight.style.height = `${coords.height}px`;
+      // With the code above, it will appear at the top of the page, so we need to put it on the
+      // element's position.
+      highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+      // console.log(coords);
+    }
+
+    // run the function when the user hover over the links
+    triggers.forEach(a => a.addEventListener('mouseenter', highlightLink));
+
   </script>
 </body>
 </html>
