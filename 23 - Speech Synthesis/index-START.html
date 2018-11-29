@@ -35,6 +35,58 @@
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+  msg.text = document.querySelector('[name="text"]').value;
+
+  function populateVoices() {
+    voices = this.getVoices();
+    // console.log(voices);
+    // Will get the available voices from the system. It will have many,
+    // so we will get them on an array.
+    // We can use the .filter to filter the languages
+    const voiceOptions = voices
+      .filter(voice => voice.lang.includes('en'))
+      .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+      .join();
+      voicesDropdown.innerHTML = voiceOptions;
+  };
+
+  // We got the system voices, but we need to choose which one we want and then,
+  // put it in our app.
+  function setVoice() {
+    // Below we will make it loop for all the voices array and select the one that matches
+    // the same that we choose using the dropdown menu.
+    msg.voice = voices.find(voice => voice.name === this.value);
+    toggle();
+  }
+
+  function toggle(startOver = true) {
+    // Stop the voice when we choose another
+    speechSynthesis.cancel();
+    // Cancel the new voice we choose, to avoid a loop.
+    if (startOver){
+      // Start to speak using the other voice
+      speechSynthesis.speak(msg);
+    };
+  };
+
+  function setOption () {
+    // With this we get the pitch and rate values
+    // console.log(this.name, this.value);
+    msg[this.name] = this.value;
+    toggle();
+  }
+
+  // Use the global variable speechSynthesis to work, call the populateVoices.
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+  // Add an event listener to change the voice when the user chooses a new one.
+  voicesDropdown.addEventListener('change', setVoice);
+  options.forEach(option => option.addEventListener('change', setOption));
+  speakButton.addEventListener('click', toggle);
+  // We call the function, and then we passa an argument using 'bind'.
+  stopButton.addEventListener('click', toggle.bind(null, false));
+  // Or use the code below to replace the above... Downside, we are creating another function.
+  // stopButton.addEventListener('click', () => toggle(false));
 </script>
 
 </body>
