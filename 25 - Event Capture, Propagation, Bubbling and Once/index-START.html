@@ -38,7 +38,33 @@
 </style>
 
 <button></button>
+
 <script>
+  const divs = document.querySelectorAll('div');
+
+  function logText(e) {
+    console.log(this.classList.value);
+    // To avoid the bubble up, we stop the propagation.
+    e.stopPropagation();
+  }
+  /* You will notice a problem with the code below:
+  divs.forEach(div => div.addEventListener('click', logText));
+  When you click the div 'one' the red one in the center, the console will also log div two and three. That happens because of the event bubbling effect.
+  Div 3 is inside div 2 that is inside the 1, so the event bubbling happens like this:
+  div3>div2>div1>body>html>browser>o.s.
+  It will be 'zooming out'.
+  We were only able to notice that because of the console.log inside the function above.
+  console.log(this.classList.value);
+  So Let's 'fix' it for this challenge!
+  */
+  divs.forEach(div => div.addEventListener('click', logText, {
+    // We are adding an option here to capture. It will run the function on the way DOWN.
+    // capture is by default 'false'.
+    capture: false,
+    // Once will run the event once and then will unbind it.
+    // That means that once it runs, it is like we did div.removeEventListener.
+    once: false
+  }));
 
 </script>
 </body>
