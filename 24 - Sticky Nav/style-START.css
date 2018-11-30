@@ -22,6 +22,10 @@ body {
   transform: scale(0.98);
   transition: transform 0.5s;
 }
+/* Expand the text div when the user scrolls down enough. Just a nice effect */
+.fixed-nav .site-wrap {
+  transform: scale(1);
+}
 
 header {
   text-align: center;
@@ -48,6 +52,11 @@ nav {
   z-index: 1;
 }
 
+.fixed-nav nav {
+  position: fixed;
+  box-shadow: 0 5px rgba(0, 0, 0, 0.1);
+}
+
 nav ul {
   margin: 0;
   padding:0;
@@ -67,9 +76,14 @@ li.logo {
   max-width:0;
   overflow: hidden;
   background: white;
-  transition: all .5s;
+  transition: all .9s;
   font-weight: 600;
   font-size: 30px;
+}
+
+/* Lets show the logo when we get the fixed nav */
+.fixed-nav li.logo {
+  max-width: 500px;
 }
 
 li.logo a {
