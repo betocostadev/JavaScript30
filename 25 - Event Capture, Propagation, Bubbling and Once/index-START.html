@@ -63,6 +63,8 @@
     capture: false,
     // Once will run the event once and then will unbind it.
     // That means that once it runs, it is like we did div.removeEventListener.
+    // IMPORTANT: Once is a good choice for a button like a store checkout button, since
+    // you don't want to the user to click a lot of times and break the purchase.
     once: false
   }));
 
