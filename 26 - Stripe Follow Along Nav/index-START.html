@@ -140,6 +140,8 @@
     display: none;
   }
 
+  /* Both the classes below are separated for our menu to work. In the first case
+  we change the display block for the opacity to work, on the second we apply the opacity. This works because we have added the setTimout function to give some mileseconds to the browser to change the element to block, then we applied the opacity. */
   .trigger-enter .dropdown {
     display: block;
   }
@@ -149,7 +151,6 @@
   }
 
 
-
   .dropdownBackground {
     width:100px;
     height:100px;
@@ -157,7 +158,7 @@
     background: #fff;
     border-radius: 4px;
     box-shadow: 0 50px 100px rgba(50,50,93,.1), 0 15px 35px rgba(50,50,93,.15), 0 5px 15px rgba(0,0,0,.1);
-    transition:all 0.3s, opacity 0.1s, transform 0.2s;
+    transition:all 0.3s, opacity 0.1s, transform 0.25s;
     transform-origin: 50% 0;
     display: flex;
     justify-content: center;
@@ -221,6 +222,56 @@
 </style>
 
 <script>
+  const triggers = document.querySelectorAll('.cool > li');
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+  // Listen for a hover in or out, mouseenter or mouseleave.
+  function handleEnter() {
+    this.classList.add('trigger-enter');
+    // In here we need an arrow function because it will inherit the 'this' from the parent function as we want.
+    // A 'normal' function would not.
+    /* If we hover from one element to another very fast, we may break the function, because we gave no time for the timeOut, so we will use an if statement to fix that. */
+    setTimeout(() => {
+      if(this.classList.contains('trigger-enter')) {
+        this.classList.add('trigger-enter-active')
+      }
+    }, 150);
+    // Let's get our menu background on the page:
+    background.classList.add('open');
+
+    // Get the correct coords to display the background:
+    const dropdown = this.querySelector('.dropdown');
+
+    const dropdownCoords = dropdown.getBoundingClientRect();
+    /* We also need to get the coords from the Nav, because if we have something before the nav, like and H1, a banner, etc... the coords will change and we need to take it into account. */
+    const navCoords = nav.getBoundingClientRect();
+    // console.log(dropdownCoords);
+    // console.log(navCoords);
+    const coords = {
+      height: dropdownCoords.height,
+      width: dropdownCoords.width,
+      // Let's use the correct coords by subtracting the other coords.
+      top: dropdownCoords.top - navCoords.top,
+      left: dropdownCoords.left - navCoords.left
+    };
+    console.log(coords);
+    background.style.setProperty('width', `${coords.width}px`);
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+
+  function handleLeave() {
+    this.classList.remove('trigger-enter-active');
+    setTimeout(() => this.classList.remove('trigger-enter'), 150);
+    background.classList.remove('open');
+    // console.log('LEAVE!');
+
+  }
+
+  // Activate when the events happen
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
 </script>
 
 </body>
