@@ -35,6 +35,45 @@
   </div>
 
 <script>
+  const slider = document.querySelector('.items');
+  let isDown = false;
+  // We need to know where the click start was, so we will use the startX.
+  let startX;
+  // We need to know where the inicial scroll was when we started scrolling, so scrollLeft below.
+  let scrollLeft;
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('active');
+    // We will subtract the offset so we get the corret position of the mouse click and not the
+    // click relative to the page window.
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+    // console.log(startX);
+  });
+  slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+  slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+  slider.addEventListener('mousemove', (e) => {
+    if(!isDown) return // stop the fn from running
+    // console.log(isDown);
+    // console.log('Do work!');
+    // Let's stop any event like selecting a text that is inside the div.
+    e.preventDefault();
+    // Figure out where the cursor is when we moved it. We will recalculate it
+    // every time we move the mouse.
+    const x = e.pageX - slider.offsetLeft;
+    // console.log({x, startX});
+    // How far we moved from the initial space:
+    const walk = x - startX;
+    // const walk = (x - startX) * 3; - TIP : we could make the scroll faster using this code.
+    // We don't do just like = walk. We need to do the math to work good.
+    slider.scrollLeft = scrollLeft - walk;
+  });
 </script>
 
   </body>
