@@ -36,6 +36,65 @@
   const holes = document.querySelectorAll('.hole');
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
+  // We need a variable to avoid that the same hole is called again just after it was called
+  let lastHole;
+  // A variable to stop the game
+  let timeUp = false;
+  // Let's use the score board to give the user info
+  let score = 0;
+
+  function randomTime(min, max) {
+    // Let's get the random time for the moles to appear. Ex 500ms to 2000ms
+    return Math.round(Math.random() * (max - min) + min);
+  };
+
+  function randomHole(holes) {
+    // We will use a list of holes - Could be any list of DOM elements
+    // console.log(holes.length); // Will give us 6 - a Node List with our 6 'hole' divs.
+    const idx = Math.floor(Math.random() * holes.length);
+    const hole = holes[idx]; // Like hole 1, 2, 3, up to 5.
+    // Avoid the same hole to be called twice.
+    if (hole === lastHole) {
+      // Just run the function again:
+      return randomHole(holes);
+    }
+    // console.log(hole);
+    lastHole = hole;
+    return hole;
+  };
+
+  // Make the moles pop up
+  function peep() {
+    const time = randomTime(400, 1000);
+    const hole = randomHole(holes);
+    // console.log(time, hole);
+    hole.classList.add('up'); // Call the mole up with the css transform done in the style file.
+    setTimeout(() => {
+      hole.classList.remove('up');
+      if(!timeUp) peep() // Run the game again if the time is not up
+    }, time);
+  };
+
+  function startGame() {
+    scoreBoard.textContent = '0';
+    timeUp = false; // We do it again here because if you restart the game, it will be true.
+    score = 0;
+    peep();
+    // The time the game will run
+    setTimeout(() => timeUp = true, 10000);
+  };
+
+  // Hit the mole!
+  function bonk(e) {
+    console.log(e);
+    /* The mouse click event will generate a tag called isTrusted, and it will be set to true, for each click on a mole. We need to use this to avoid people hacking the game using JS. */
+    if(!e.isTrusted) return; // Cheater!
+    score++;
+    this.classList.remove('up'); // Make the mole goes down when hit, even if there is time left.
+    scoreBoard.textContent = score;
+  }
+
+  moles.forEach(mole => mole.addEventListener('click', bonk));
 
 </script>
 </body>
